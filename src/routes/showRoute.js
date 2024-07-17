@@ -1,7 +1,6 @@
 const router = require('express').Router();
 
-const Show = require('../models/showModel');
-
+const {Show} = require('../models/showModel');
 // Add Show
 router.post('/add-show',  async (req, res) => {
     try{
@@ -22,7 +21,9 @@ router.post('/add-show',  async (req, res) => {
 
 router.post('/get-all-shows-by-theatre',  async (req, res) => {
     try{
+        // const shows = await Show.find({theatre: req.body.theatreId}).populate('movie')
         const shows = await Show.find({theatre: req.body.theatreId}).populate('movie')
+
         res.send({
             success: true,
             message: "All shows fetched",

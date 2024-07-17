@@ -38,14 +38,4 @@ const showSchema = new mongoose.Schema({
 }, {timestamps: true }
     );
 
-export const findByIdAndUpdate = async (id, updateData) => {
-    try {
-        const updatedShow = await Show.findByIdAndUpdate(id, updateData, { new: true });
-        return updatedShow;
-    } catch (error) {
-        throw new Error('Error updating show by ID');
-    }
-};
-
-
 export const Show = mongoose.model("shows", showSchema);

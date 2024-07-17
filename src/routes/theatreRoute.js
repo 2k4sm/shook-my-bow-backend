@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const Theatre = require('../models/theatreModel');
+const {Theatre} = require('../models/theatreModel');
 
 router.post('/add-theatre',  async (req, res) => {
     try{

@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const Movie = require('../models/movieModel')
+const {Movie} = require('../models/movieModel')
 
 // Add a Movie
 

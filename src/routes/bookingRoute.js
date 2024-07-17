@@ -1,6 +1,6 @@
 const express = require('express');
-const { Booking, findBookings } = require('../models/bookingModel');
-const { findByIdAndUpdate: findByIdAndUpdateShow } = require('../models/showModel');
+const { Booking } = require('../models/bookingModel');
+const { Show } = require('../models/showModel');
 const EmailHelper = require('../utils/emailSender');
 const authMiddleware = require('../middlewares/authMiddleware');
 const stripe = require('stripe');
@@ -82,7 +82,7 @@ router.post("/book-show", async (req, res) => {
 
         const show = await Booking.findById(req.body.show).populate("movie");
         const updatedBookedSeats = [...show.bookedSeats, ...req.body.seats];
-        await findByIdAndUpdateShow(req.body.show, {
+        await Show.findByIdAndUpdate(req.body.show, {
             bookedSeats: updatedBookedSeats,
         });
 
@@ -131,7 +131,7 @@ router.post("/book-show", async (req, res) => {
 
 router.get("/get-all-bookings", authMiddleware, async (req, res) => {
     try {
-        const bookings = await findBookings({ user: req.body.userId })
+        const bookings = await Booking.find({ user: req.body.userId })
             .populate("user")
             .populate("show")
             .populate({

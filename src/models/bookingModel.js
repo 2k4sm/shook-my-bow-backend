@@ -19,17 +19,5 @@ const bookingSchema = new Schema({
     }
 }, { timestamps: true });
 
-const Booking = model("bookings", bookingSchema);
+export const Booking = model("bookings", bookingSchema);
 
-// Define the find function
-const findBookings = async (query) => {
-    try {
-        const bookings = await Booking.find(query);
-        return bookings;
-    } catch (error) {
-        throw new Error('Error finding bookings');
-    }
-};
-
-// Export the model and the custom function
-module.exports = { Booking, findBookings };
