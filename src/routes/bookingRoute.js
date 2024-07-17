@@ -80,9 +80,13 @@ router.post("/book-show", async (req, res) => {
         const newBooking = new Booking(req.body);
         await newBooking.save();
 
-        const show = await Booking.findById(req.body.show).populate("movie");
+        const show = await Show.findById(req.body.show).populate("movie");
+        if (!show) {
+            throw new Error("Show not found");
+        }
+
         const updatedBookedSeats = [...show.bookedSeats, ...req.body.seats];
-        await Show.findByIdAndUpdate(req.body.show, {
+        await Show.findByIdAndUpdate(show._id, {
             bookedSeats: updatedBookedSeats,
         });
 
