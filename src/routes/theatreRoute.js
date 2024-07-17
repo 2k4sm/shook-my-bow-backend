@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const {Theatre} = require('../models/theatreModel');
-
+const {Show} = require('../models/showModel');
 router.post('/add-theatre',  async (req, res) => {
     try{
         const newTheatre = new Theatre(req.body);
@@ -71,17 +71,29 @@ router.put('/update-theatre',  async (req, res) => {
 
 // Delete theatre
 router.put('/delete-theatre', async (req, res) => {
-    try{
+    try {
+        const showsWithBookings = await Show.find({
+            theatre: req.body.theatreId,
+            bookedSeats: { $ne: [] }
+        });
+
+        if (showsWithBookings.length > 0) {
+            return res.send({
+                success: false,
+                message: "Cannot delete theatre as there are shows with booked seats."
+            });
+        }
+
         await Theatre.findByIdAndDelete(req.body.theatreId);
         res.send({
             success: true,
             message: "The theatre has been deleted!"
-        })
-    }catch(err){
+        });
+    } catch (err) {
         res.send({
             success: false,
             message: err.message
-        })
+        });
     }
 });
 

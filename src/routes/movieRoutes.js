@@ -1,7 +1,6 @@
 const router = require('express').Router();
 const {Movie} = require('../models/movieModel')
-
-// Add a Movie
+const {Show} = require('../models/showModel')
 
 router.post('/add-movie' , async (req , res)=>{
     try {
@@ -20,7 +19,6 @@ router.post('/add-movie' , async (req , res)=>{
 })
 
 
-// Get all the movies
 
 router.get('/get-all-movies' , async(req , res)=>{
   try {
@@ -40,9 +38,7 @@ router.get('/get-all-movies' , async(req , res)=>{
 })
 
 
-// Update a movie
 
-// Update a movie
 router.put('/update-movie', async (req, res) => {
     try{
         const movie = await Movie.findByIdAndUpdate(req.body.movieId, req.body);
@@ -60,22 +56,30 @@ router.put('/update-movie', async (req, res) => {
 });
 
 router.put('/delete-movie', async (req, res) => {
-    try{
+    try {
+        const showsWithMovie = await Show.find({ movie: req.body.movieId });
+
+        if (showsWithMovie.length > 0) {
+            return res.send({
+                success: false,
+                message: "Cannot delete movie as there are shows booked for it."
+            });
+        }
+
         await Movie.findByIdAndDelete(req.body.movieId);
         console.log(req.body.movieId);
         res.send({
             success: true,
             message: 'The movie has been deleted!',
         });
-    }catch(err){
+    } catch (err) {
         res.send({
             success: false,
             message: err.message
         });
     }
-})
+});
 
-// Fetch single movie by id
 router.get('/movie/:id', async (req, res) => {
     try{
         const movie = await Movie.findById(req.params.id);
@@ -94,14 +98,6 @@ router.get('/movie/:id', async (req, res) => {
 });
 
 
-
-
-
-
-//APi end 
-
-
-// update the movie , delete the movie , get all the movies
 
 
 module.exports = router
