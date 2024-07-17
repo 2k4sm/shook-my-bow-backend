@@ -36,6 +36,14 @@ router.post("/register", async (req, res) => {
       success: true,
       message: "You've successfully signed up, please login now!",
     });
+
+    await EmailHelper(
+      "welcome.html",
+      "Welcome to Book My Show"
+      , req.body.email,
+      {
+        name: req.body.name,
+      });
   } catch (err) {
     console.log(err);
   }
