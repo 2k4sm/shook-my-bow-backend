@@ -148,7 +148,8 @@ router.patch("/forgetpassword", async function (req, res) {
     });
     // send the mail to there email -> otp
     await EmailHelper(
-      "otp.html"
+      "otp.html",
+      "OTP for Password reset"
       , user.email,
       {
         name: user.name,
@@ -160,7 +161,6 @@ router.patch("/forgetpassword", async function (req, res) {
       status: "failure"
     })
   }
-  //  email
 })
 
 

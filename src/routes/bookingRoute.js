@@ -115,7 +115,7 @@ router.post("/book-show", async (req, res) => {
             data: populatedBooking,
         });
 
-        await EmailHelper("ticketTemplate.html", populatedBooking.user.email, {
+        await EmailHelper("ticketTemplate.html",`${populatedBooking.show.movie.title} Movie Booked`,populatedBooking.user.email, {
             name: populatedBooking.user.name,
             movie: populatedBooking.show.movie.title,
             theatre: populatedBooking.show.theatre.name,

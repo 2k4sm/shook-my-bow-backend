@@ -4,8 +4,6 @@ const dotenv = require("dotenv");
 const path = require("path");
 dotenv.config();
 
-const { SENDGRID_API_KEY } = process.env;
-
 function replaceContent(content, creds) {
     let allkeysArr = Object.keys(creds);
     allkeysArr.forEach(function (key) {
@@ -14,24 +12,24 @@ function replaceContent(content, creds) {
 
     return content;
 }
-async function EmailHelper(templateName, reciverEmail, creds) {
+async function EmailHelper(templateName, emailSub,reciverEmail, creds) {
     // console.log(templateName, reciverEmail, creds)
     try {
         const templatePath = path.join(__dirname, "email_templates", templateName);
         let content = await fs.promises.readFile(templatePath, "utf-8");
         const emailDetails = {
             to: reciverEmail,
-            from: 'mrinal.bhattacharya@scaler.com', // Change to your verified sender
-            subject: 'RESET OTP',
+            from: process.env.EMAIL_USER,
+            subject: emailSub,
             text: `Hi ${creds.name} this your reset otp ${creds.otp}`,
             html: replaceContent(content, creds),
         }
         const transportDetails = {
-            host: 'smtp.sendgrid.net',
+            host: 'smtp.gmail.com',
             port: 587,
             auth: {
-                user: "apikey",
-                pass: SENDGRID_API_KEY
+              user: process.env.EMAIL_USER,
+              pass: process.env.EMAIL_PASS
             }
         }
 
